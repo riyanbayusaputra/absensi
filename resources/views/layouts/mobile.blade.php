@@ -16,6 +16,11 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
     <meta name="twitter:description" content="{{ $description ?? 'Aplikasi absensi karyawan PT sakamedia.' }}">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/saka.jpg') }}">
+<link rel="shortcut icon" type="image/png" href="{{ asset('images/saka.jpg') }}">
+<link rel="apple-touch-icon" href="{{ asset('images/saka.jpg') }}">
 
     {{-- Tailwind via CDN: tanpa Vite, tanpa npm. data-navigate-once agar tidak dimuat ulang saat wire:navigate --}}
     <script data-navigate-once src="https://cdn.tailwindcss.com/3.4.17?plugins=forms"></script>

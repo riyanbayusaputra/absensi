@@ -32,6 +32,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
+               ->brandName('Saka Media Admin')
+            ->brandLogo(asset('images/saka.jpg'))
             ->login()
             ->navigationGroups(['Kepegawaian', 'Absensi', 'Cuti & Izin', 'Laporan', 'Master Data'])
 ->renderHook(PanelsRenderHook::HEAD_END, fn () => new HtmlString(
