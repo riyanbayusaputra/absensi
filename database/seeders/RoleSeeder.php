@@ -15,10 +15,10 @@ class RoleSeeder extends Seeder
         }
 
         $admin = User::firstOrCreate(
-            ['email' => 'admin@absensi.test'],
+            ['email' => 'admin@gmail.com'],
             [
                 'name'                 => 'Super Admin',
-                'password'             => 'password',
+                'password'             => '1234567890',
                 'is_active'            => true,
                 'must_change_password' => false,
             ]
