@@ -38,7 +38,7 @@ class EditEmployee extends EditRecord
 
             if (! empty($data['password'])) {
                 $userData['password'] = $data['password'];
-                $userData['must_change_password'] = true;
+                $userData['must_change_password'] = false;
             }
 
             $record->user?->update($userData);

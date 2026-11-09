@@ -20,7 +20,7 @@ class CreateEmployee extends CreateRecord
                 'email'                => $data['email'],
                 'password'             => $data['password'],   // di-hash otomatis oleh cast 'hashed'
                 'is_active'            => $data['status'] === 'aktif',
-                'must_change_password' => true,
+                'must_change_password' => false,
             ]);
             $user->assignRole($data['role'] ?? 'karyawan');
 
