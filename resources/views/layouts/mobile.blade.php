@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#4f46e5">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? config('app.name') }}</title>
+
     <meta name="description" content="{{ $description ?? 'Aplikasi absensi karyawan PT sakamedia.' }}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ url()->current() }}">
@@ -17,8 +17,8 @@
     <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
     <meta name="twitter:description" content="{{ $description ?? 'Aplikasi absensi karyawan PT sakamedia.' }}">
     
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/saka.jpg') }}">
+    <link rel="icon" type="image/jpg" sizes="32x32" href="{{ asset('images/saka.jpg') }}">
+    <link rel="icon" type="image/jpg" href="{{ asset('images/saka.jpg') }}">
 <link rel="shortcut icon" type="image/png" href="{{ asset('images/saka.jpg') }}">
 <link rel="apple-touch-icon" href="{{ asset('images/saka.jpg') }}">
 

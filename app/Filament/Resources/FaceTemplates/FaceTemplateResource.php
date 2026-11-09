@@ -14,6 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 use UnitEnum;
 
 class FaceTemplateResource extends Resource
@@ -57,8 +58,13 @@ class FaceTemplateResource extends Resource
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
-                ImageColumn::make('photo')->label('Foto')->circular()->disk('public')->visibility('public')
-                    ->state(fn (FaceTemplate $record) => route('face.photo', $record)),
+                ImageColumn::make('photo')
+    ->label('Foto')
+    ->circular()
+
+   ->disk('public')->visibility('public')
+   
+    ->getStateUsing(fn (FaceTemplate $record) => route('face.photo', $record)),
                 TextColumn::make('employee.nik')->label('NIK')->searchable(),
                 TextColumn::make('employee.name')->label('Karyawan')->searchable(),
                 TextColumn::make('status')->label('Status')->badge()

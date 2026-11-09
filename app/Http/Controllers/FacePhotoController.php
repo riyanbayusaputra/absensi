@@ -9,10 +9,19 @@ class FacePhotoController extends Controller
 {
     public function show(FaceTemplate $faceTemplate)
     {
-        abort_unless(Storage::disk('public')->exists($faceTemplate->photo_path), 404);
+        $path = $faceTemplate->photo_path;
+        $disk = Storage::disk('public');
 
-        activity()->causedBy(auth()->user())->performedOn($faceTemplate)->log('Melihat foto wajah');
+        abort_if(! $path || ! $disk->exists($path), 404, 'File foto tidak ditemukan: ' . $path);
 
-        return Storage::disk('public')->response($faceTemplate->photo_path);
+        // buang keluaran liar (spasi/BOM/notice) supaya data gambar tidak rusak
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        return response()->file($disk->path($path), [
+            'Content-Type'  => $disk->mimeType($path) ?: 'image/jpeg',
+            'Cache-Control' => 'private, max-age=3600',
+        ]);
     }
 }

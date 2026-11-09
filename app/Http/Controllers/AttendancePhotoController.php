@@ -12,8 +12,17 @@ class AttendancePhotoController extends Controller
         abort_unless(in_array($type, ['in', 'out'], true), 404);
 
         $path = $attendance->{$type . '_photo'};
-        abort_unless($path && Storage::disk('public')->exists($path), 404);
+        $disk = Storage::disk('public');
 
-        return Storage::disk('public')->response($path);
+        abort_if(! $path || ! $disk->exists($path), 404, 'File foto tidak ditemukan: ' . $path);
+
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        return response()->file($disk->path($path), [
+            'Content-Type'  => $disk->mimeType($path) ?: 'image/jpeg',
+            'Cache-Control' => 'private, max-age=3600',
+        ]);
     }
 }
