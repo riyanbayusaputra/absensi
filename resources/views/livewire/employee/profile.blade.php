@@ -125,7 +125,7 @@
                     </div>
                 @endif
             </div>
-            <p class="mt-2 text-[11px] text-slate-400">Data di atas diatur oleh HRD. Hubungi HRD bila ada yang salah.</p>
+            <p class="mt-2 text-[11px] text-slate-400">Data di atas diatur oleh Administrator. Hubungi Administrator bila ada yang salah.</p>
         </div>
 
         @if ($e)
