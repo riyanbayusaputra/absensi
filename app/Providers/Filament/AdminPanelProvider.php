@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
             ->brandName('Saka Media Admin')
-            ->brandLogo(asset('images/saka.jpg'))
+            // ->brandLogo(asset('images/saka.jpg'))
             ->login()
             ->navigationGroups([
                 'Kepegawaian',
