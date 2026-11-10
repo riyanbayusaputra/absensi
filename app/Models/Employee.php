@@ -16,6 +16,8 @@ class Employee extends Model
         'status',
         'role',
         'photo',
+        'phone',
+        'address',
         'nik',
         'department_id',
         'position_id',

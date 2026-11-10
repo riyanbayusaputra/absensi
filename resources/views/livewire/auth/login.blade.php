@@ -117,11 +117,11 @@
             </form>
 
             <div class="mt-6 rounded-xl bg-slate-50 p-3 text-center text-xs text-slate-500">
-                Lupa password atau akun belum aktif? <span class="font-semibold text-slate-700">Hubungi HRD</span>.
+                Lupa password atau akun belum aktif? <span class="font-semibold text-slate-700">Hubungi Administrator</span>.
             </div>
 
             <p class="mt-6 text-center text-[11px] text-slate-400">
-                &copy; {{ now()->year }} {{ config('app.name') }} &middot; Akses aman untuk akun Anda
+                &copy; {{ now()->year }} PT.Sakamedia Komunika
             </p>
         </div>
     </div>

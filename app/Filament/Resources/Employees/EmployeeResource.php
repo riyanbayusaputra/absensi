@@ -114,8 +114,9 @@ class EmployeeResource extends Resource
         return $table
             ->defaultSort('name')
             ->columns([
-                ImageColumn::make('photo')->label('')->circular()->disk('public')
-                    ->defaultImageUrl(fn (Employee $record) => 'https://ui-avatars.com/api/?background=e0e7ff&color=4f46e5&name=' . urlencode($record->name)),
+                ImageColumn::make('photo')->label('')->circular()
+                ->disk('public')->visibility('public')
+                ->defaultImageUrl(fn (Employee $record) => 'https://ui-avatars.com/api/?background=e0e7ff&color=4f46e5&name=' . urlencode($record->name)),
                 TextColumn::make('nik')->label('NIK')->searchable(),
                 TextColumn::make('name')->label('Nama')->searchable()->sortable(),
                 TextColumn::make('department.name')->label('Departemen')->sortable(),

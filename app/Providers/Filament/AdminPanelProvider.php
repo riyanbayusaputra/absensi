@@ -32,15 +32,21 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
-               ->brandName('Saka Media Admin')
+            ->brandName('Saka Media Admin')
             ->brandLogo(asset('images/saka.jpg'))
             ->login()
-            ->navigationGroups(['Kepegawaian', 'Absensi', 'Cuti & Izin', 'Laporan', 'Master Data'])
-->renderHook(PanelsRenderHook::HEAD_END, fn () => new HtmlString(
-    '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">'
-    . '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
-    . '<script src="' . asset('js/office-map.js') . '"></script>'
-))
+            ->navigationGroups([
+                'Kepegawaian',
+                'Absensi',
+                'Cuti & Izin',
+                'Laporan',
+                'Master Data',
+            ])
+            ->renderHook(PanelsRenderHook::HEAD_END, fn () => new HtmlString(
+                '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">'
+                . '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
+                . '<script src="' . asset('js/office-map.js') . '"></script>'
+            ))
             ->colors([
                 'primary' => Color::Amber,
             ])
