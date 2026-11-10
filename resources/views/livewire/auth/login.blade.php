@@ -29,7 +29,7 @@
                 </div>
                 <div>
                     {{-- <p class="text-lg font-bold leading-tight">{{ config('app.name') }}</p> --}}
-                    <p class="text-[11px] text-white/70">Absensi karyawan</p>
+                    <p class="text-[11px] text-white/70">Absensi</p>
                 </div>
             </div>
 
@@ -43,7 +43,7 @@
         {{-- ================= FORM ================= --}}
         <div class="relative -mt-8 flex-1 rounded-t-[2rem] bg-white px-6 pb-8 pt-8">
             <h1 class="text-xl font-bold text-slate-900">Masuk ke akun Anda</h1>
-            <p class="mt-1 text-sm text-slate-500">Gunakan email dan password dari HRD.</p>
+            <p class="mt-1 text-sm text-slate-500">Gunakan email dan password dari administrator.</p>
 
             <form wire:submit="login" class="mt-6 space-y-4">
 
