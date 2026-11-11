@@ -63,7 +63,7 @@ class AttendanceReport
         $fs    = $from->toDateString();
         $ts    = $to->toDateString();
         $ids   = $employees->pluck('id')->all();
-        $workDays  = config('attendance.leave.work_days', [1, 2, 3, 4, 5]);
+        $isOffFor  = app(ScheduleService::class)->resolver($ids, $from, $to);
         $hasReview = Schema::hasColumn('attendances', 'review_status');
         $hasLeave  = Schema::hasTable('leave_requests');
 
@@ -103,7 +103,7 @@ class AttendanceReport
 
             foreach (CarbonPeriod::create($from, $to) as $d) {
                 $ds     = $d->toDateString();
-                $isOff  = ! in_array($d->dayOfWeekIso, $workDays, true) || isset($holidays[$ds]);
+                $isOff  = $isOffFor($e->id, $d);
                 $att    = $atts->get($e->id)?->get($ds);
                 $before = $e->join_date && $d->lt($e->join_date);
 

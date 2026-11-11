@@ -19,7 +19,7 @@
     <meta name="robots" content="{{ $robots }}">
     <link rel="canonical" href="{{ $canonical }}">
 
-    <meta name="theme-color" content="#4f46e5">
+<meta name="theme-color" content="#87CEEB">
     <meta name="application-name" content="{{ $siteName }}">
     <meta name="apple-mobile-web-app-title" content="{{ $siteName }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -41,9 +41,10 @@
     <meta name="twitter:description" content="{{ Str::limit($pageDesc, 200) }}">
     <meta name="twitter:image" content="{{ $pageImage }}">
 
-    {{-- Ikon (tipe disesuaikan dengan file .jpg) --}}
-    <link rel="icon" type="image/jpeg" href="{{ asset('images/saka.jpg') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/saka.jpg') }}">
+    {{-- Ikon --}}
+<link rel="icon" type="image/jpeg" href="{{ asset('images/saka.jpg') }}">
+<link rel="shortcut icon" type="image/jpeg" href="{{ asset('images/saka.jpg') }}">
+<link rel="apple-touch-icon" href="{{ asset('images/saka.jpg') }}">
 
     {{-- Data terstruktur: hanya di halaman publik --}}
     @guest
@@ -59,8 +60,35 @@
     @endguest
 
     {{-- Tailwind via CDN: data-navigate-once agar tidak dimuat ulang saat wire:navigate --}}
+       {{-- Huruf: Plus Jakarta Sans --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script data-navigate-once src="https://cdn.tailwindcss.com/3.4.17?plugins=forms"></script>
-    <style>[x-cloak]{display:none!important}</style>
+    <script data-navigate-once>
+        (function () {
+            // Satu-satunya tempat warna merek. Ganti angka di sini bila ingin menyesuaikan dengan logo.
+           var brand = {
+    50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8',
+    500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e', 950: '#082f49'
+};
+            tailwind.config = {
+                theme: { extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        brand: brand,
+                        indigo: brand,   // halaman lama yang masih memakai kelas indigo ikut berganti warna
+                        violet: brand,
+                        slate: {
+                            50: '#f6f7f5', 100: '#eceee9', 200: '#dde1da', 300: '#c3c9c0', 400: '#979f95',
+                            500: '#6b746b', 600: '#4f574f', 700: '#3b423b', 800: '#252b26', 900: '#15201c'
+                        }
+                    }
+                } }
+            };
+        })();
+    </script>
 
     @stack('head')
     @livewireStyles

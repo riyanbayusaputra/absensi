@@ -10,6 +10,7 @@ use App\Support\TeamScope;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Schema;
+use App\Services\ScheduleService;
 
 class AttendanceStats extends StatsOverviewWidget
 {
@@ -20,32 +21,37 @@ class AttendanceStats extends StatsOverviewWidget
         return auth()->user()?->hasAnyRole(['super_admin', 'hrd', 'atasan']) ?? false;
     }
 
-    protected function getStats(): array
+        protected function getStats(): array
     {
         $user  = auth()->user();
         $today = today();
 
-        $total = TeamScope::restrict(Employee::where('status', 'aktif'), $user, null)->count();
+        $ids   = TeamScope::restrict(Employee::where('status', 'aktif'), $user, null)->pluck('id')->all();
+        $total = count($ids);
 
-        $att = fn () => TeamScope::restrict(Attendance::whereDate('date', $today), $user);
-        $hadir = $att()->count();
-        $telat = $att()->where('status', 'terlambat')->count();
+        // karyawan yang dijadwalkan masuk hari ini (libur pribadi dan libur nasional dikecualikan)
+        $isOff     = app(ScheduleService::class)->resolver($ids, $today, $today);
+        $scheduled = collect($ids)->reject(fn ($id) => $isOff($id, $today))->values();
 
-        $cuti = 0;
-        $pending = 0;
+        $att        = fn () => TeamScope::restrict(Attendance::whereDate('date', $today), $user);
+        $hadir      = $att()->count();
+        $telat      = $att()->where('status', 'terlambat')->count();
+        $presentIds = $att()->pluck('employee_id')->unique();
+
+        $onLeaveIds = collect();
+        $pending    = 0;
         if (Schema::hasTable('leave_requests')) {
-            $cuti = TeamScope::restrict(
+            $onLeaveIds = TeamScope::restrict(
                 LeaveRequest::where('status', 'approved')->where('is_half_day', false)
                     ->whereDate('start_date', '<=', $today)->whereDate('end_date', '>=', $today),
                 $user
-            )->pluck('employee_id')->unique()->count();
+            )->pluck('employee_id')->unique();
 
             $pending = TeamScope::restrict(LeaveRequest::where('status', 'pending'), $user)->count();
         }
 
-        $isWorkDay = in_array($today->dayOfWeekIso, config('attendance.leave.work_days', [1, 2, 3, 4, 5]), true)
-            && ! Holiday::whereDate('date', $today)->exists();
-        $belum = $isWorkDay ? max(0, $total - $hadir - $cuti) : 0;
+        $belum = $scheduled->diff($presentIds)->diff($onLeaveIds)->count();
+        $libur = $total - $scheduled->count();
 
         return [
             Stat::make('Hadir hari ini', $hadir)
@@ -55,9 +61,12 @@ class AttendanceStats extends StatsOverviewWidget
                 ->description('hari ini')
                 ->descriptionIcon('heroicon-o-clock')->color($telat > 0 ? 'warning' : 'gray'),
             Stat::make('Belum absen', $belum)
-                ->description($isWorkDay ? 'di luar yang cuti/izin' : 'hari ini bukan hari kerja')
+                ->description('dari ' . $scheduled->count() . ' yang dijadwalkan masuk')
                 ->descriptionIcon('heroicon-o-user-minus')->color($belum > 0 ? 'danger' : 'gray'),
-            Stat::make('Cuti / izin / sakit', $cuti)
+            Stat::make('Libur hari ini', $libur)
+                ->description('sesuai jadwal / libur nasional')
+                ->descriptionIcon('heroicon-o-moon')->color('gray'),
+            Stat::make('Cuti / izin / sakit', $onLeaveIds->count())
                 ->description("{$pending} pengajuan menunggu")
                 ->descriptionIcon('heroicon-o-calendar-days')->color('info'),
         ];

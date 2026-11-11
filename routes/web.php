@@ -13,6 +13,7 @@ use App\Livewire\Employee\Leave\Create as LeaveCreate;
 use App\Livewire\Employee\Leave\Index as LeaveIndex;
 use App\Livewire\Employee\History;
 use App\Livewire\Employee\Profile;
+use App\Livewire\Employee\Schedule;
 
 Route::redirect('/', '/app');
 
@@ -37,6 +38,9 @@ Route::middleware(['auth', 'role:karyawan|atasan|hrd|super_admin'])
 
         Route::get('/riwayat', History::class)->name('app.history');
         Route::get('/profil', Profile::class)->name('app.profile');
+   
+
+        Route::get('/jadwal', Schedule::class)->name('app.schedule');
 
         // Route berikutnya:
         // Riwayat, cuti, profil

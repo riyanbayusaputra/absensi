@@ -82,7 +82,7 @@ class Create extends Component
         $employee = auth()->user()->employee;
         $svc->ensureBalances($employee, $s->year);
 
-        $wd   = $svc->workingDays($s, $e);
+        $wd   = $svc->workingDays($s, $e, $employee);
         $days = ($this->is_half_day && $this->type->allow_half_day) ? 0.5 : $wd;
 
         return ['days' => $days, 'available' => $svc->available($employee, $this->type, $s->year)];

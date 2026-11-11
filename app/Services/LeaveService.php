@@ -21,8 +21,20 @@ class LeaveService
     /* ---------- Hitung hari ---------- */
 
     /** Hari kerja dalam rentang, tanpa akhir pekan (config) dan hari libur/cuti bersama. */
-    public function workingDays(Carbon $start, Carbon $end): int
+        /** Hari kerja dalam rentang. Dengan $employee, memakai jadwal karyawan itu (libur nasional ikut dikecualikan). */
+    public function workingDays(Carbon $start, Carbon $end, ?Employee $employee = null): int
     {
+        if ($employee) {
+            $isOff = app(ScheduleService::class)->resolver([$employee->id], $start, $end);
+            $n = 0;
+
+            foreach (CarbonPeriod::create($start, $end) as $d) {
+                if (! $isOff($employee->id, $d)) $n++;
+            }
+
+            return $n;
+        }
+
         $holidays = Holiday::whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->pluck('date')->map(fn ($d) => $d->toDateString())->all();
         $workDays = config('attendance.leave.work_days');
@@ -33,6 +45,7 @@ class LeaveService
                 $n++;
             }
         }
+
         return $n;
     }
 
@@ -164,7 +177,7 @@ class LeaveService
             $this->fail('start_date', "{$type->name} diajukan minimal {$type->min_notice_days} hari sebelum tanggal mulai.");
         }
 
-        $workingDays = $this->workingDays($start, $end);
+        $workingDays = $this->workingDays($start, $end, $e);
         if ($workingDays === 0) {
             $this->fail('start_date', 'Rentang tanggal tidak berisi hari kerja (akhir pekan atau libur).');
         }

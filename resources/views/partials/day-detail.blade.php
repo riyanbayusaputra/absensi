@@ -84,6 +84,12 @@
                 Hari libur: {{ $d['holiday'] }}
             </p>
         @endif
+        @if ($d['code'] === 'L' && ! $d['holiday'])
+            <p class="rounded-lg bg-slate-100 p-2 text-slate-600">Libur sesuai jadwal Anda.</p>
+        @endif
+        @if (($d['off'] ?? false) && $a && ! $d['holiday'])
+            <p class="rounded-lg bg-amber-50 p-2 text-amber-800">Anda masuk pada hari libur jadwal.</p>
+        @endif
 
         {{-- Cuti atau izin --}}
         @if ($d['leave'])

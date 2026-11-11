@@ -27,7 +27,7 @@ class AttendanceCalendar
         $today = today();
         $fs    = $from->toDateString();
         $ts    = $to->toDateString();
-        $workDays = config('attendance.leave.work_days', [1, 2, 3, 4, 5]);
+        $isOffFor = app(ScheduleService::class)->resolver([$e->id], $from, $to);
 
         $hasReview = self::$hasReview ??= Schema::hasColumn('attendances', 'review_status');
         $hasLeave  = self::$hasLeave ??= Schema::hasTable('leave_requests');
@@ -74,7 +74,7 @@ class AttendanceCalendar
         foreach (CarbonPeriod::create($from, $to) as $d) {
             $ds     = $d->toDateString();
             $att    = $atts->get($ds);
-            $isOff  = ! in_array($d->dayOfWeekIso, $workDays, true) || isset($holidays[$ds]);
+            $isOff  = $isOffFor($e->id, $d);
             $before = $e->join_date && $d->lt($e->join_date);
 
             $rejected = $hasReview && $att && $att->review_status === 'rejected';
@@ -103,6 +103,7 @@ class AttendanceCalendar
                 'date'      => $d->copy(),
                 'code'      => $code,
                 'att'       => $att,
+                'off'       => $isOff,
                 'rejected'  => (bool) $rejected,
                 'holiday'   => $holidays[$ds] ?? null,
                 'leave'     => $leaveMap[$ds] ?? null,

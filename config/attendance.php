@@ -20,35 +20,7 @@ return [
         'lock_minutes'            => 2,
     ],
 
-    'risk' => [
-        'enforce'              => true,
-        'review_at'            => 30,
-        'reject_at'            => 60,
-        'first_device_trusted' => true,
-        'max_travel_kmh'       => 120,
-        'clock_skew_ms'        => 120000,
-        'allowed_tz_offsets'   => [-420, -480, -540],
-        'office_ips'           => [],
-
-        'weights' => [
-            'gps_perfect_accuracy' => 25,
-            'gps_no_altitude'      => 10,
-            'gps_static'           => 20,
-            'gps_const_accuracy'   => 10,
-            'same_coords_history'  => 25,
-            'impossible_travel'    => 40,
-            'clock_skew'           => 25,
-            'timezone_mismatch'    => 20,
-            'webdriver'            => 50,
-            'desktop_device'       => 15,
-            'no_device_id'         => 20,
-            'new_device'           => 15,
-            'untrusted_device'     => 15,
-            'shared_device'        => 50,
-            'shared_coords'        => 30,
-            'ip_outside'           => 10,
-        ],
-    ],
+    
 
     'leave' => [
         'approval_levels'      => ['atasan', 'hrd'],
